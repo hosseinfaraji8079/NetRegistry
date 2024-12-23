@@ -1,0 +1,6 @@
+@Registry.API_HostAddress = http://localhost:57011/api/
+
+GET {{Registry.API_HostAddress}}/User
+Accept: application/json
+
+###

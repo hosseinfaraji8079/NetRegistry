@@ -1,0 +1,26 @@
+﻿services:
+  registry.api:
+    image: registry.api
+    ports:
+      - 8080:8080
+      - 8081:8081
+    build:
+      context: .
+      dockerfile: Registry.API/Dockerfile
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15
+    container_name: dev_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: embedded_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+volumes:
+  postgres_data:

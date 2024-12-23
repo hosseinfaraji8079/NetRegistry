@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Registry.API.Common;
+using Registry.API.Enums;
 
 namespace Registry.API.Models;
 
@@ -66,4 +67,10 @@ public class Registry : EntityBase
     /// </summary>
     [MaxLength(500, ErrorMessage = "Each transaction image path cannot exceed 500 characters.")]
     public List<string>? TransactionImages { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets the current status of the registry.
+    /// Default value is <see cref="RegistryStatus.PendingReview"/>.
+    /// </summary>
+    public RegistryStatus Status { get; set; } = RegistryStatus.PendingReview;
 }

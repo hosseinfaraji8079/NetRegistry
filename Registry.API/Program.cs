@@ -5,6 +5,7 @@ using Registry.API.Extensions;
 using Registry.API.Filters;
 using Registry.API.Repositories.implementations;
 using Registry.API.Repositories.Interfaces;
+using Registry.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<ExceptionFilter>();
 builder.Services.AddTransient(typeof(IAsyncRepository<>),typeof(BaseRepository<>));
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
+builder.Services.AddScoped<IRegistryService, RegistryService>();
 
 var app = builder.Build();
 

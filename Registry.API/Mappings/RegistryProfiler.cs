@@ -8,5 +8,6 @@ public class RegistryProfiler : Profile
     public RegistryProfiler()
     {
         CreateMap<AddRegistryDto, Models.Registry>();
+        CreateMap<RegistryDto, Models.Registry>().ReverseMap();
     }
 }

@@ -3,7 +3,7 @@ name: Auto Cache Busting for Changed Files
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   cache-busting:

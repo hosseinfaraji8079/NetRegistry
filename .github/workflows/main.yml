@@ -1,0 +1,26 @@
+name: Auto Cache Busting for Changed Files
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  cache-busting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Show Changes
+        run: git diff
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          debug: true
+          script: |
+           cd /var/registry
+           git pull origin main

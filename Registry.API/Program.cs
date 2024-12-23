@@ -21,6 +21,20 @@ builder.Services.AddDbContext<RegistryDbContext>(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ExceptionFilter>();
+
+
+
+builder.Services.AddCors(option =>
+{
+    option.DefaultPolicyName = "NetRegistryCors";
+    option.AddDefaultPolicy(configure =>
+    {
+        configure.AllowAnyHeader();
+        configure.AllowAnyMethod();
+        configure.AllowAnyOrigin();
+    });
+});
+
 builder.Services.AddTransient(typeof(IAsyncRepository<>),typeof(BaseRepository<>));
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
@@ -34,13 +48,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.MapControllers();
-
+app.UseCors("NetRegistryCors");
 app.MigrateDatabase<RegistryDbContext>((context, services) =>
 {
     var logger = services.GetService<ILogger<RegistryDbContext>>();

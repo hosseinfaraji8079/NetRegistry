@@ -10,6 +10,13 @@ public interface IAsyncRepository<T> where T : EntityBase
     /// </summary>
     /// <param name="disableTracking">Disable EF Core tracking if true.</param>
     /// <returns>List of all entities.</returns>
+    IQueryable<T> GetQueryableAsync(bool disableTracking = true);
+    
+    /// <summary>
+    /// Retrieves all entities without any filtering or tracking.
+    /// </summary>
+    /// <param name="disableTracking">Disable EF Core tracking if true.</param>
+    /// <returns>List of all entities.</returns>
     Task<IReadOnlyList<T>> GetAllAsync(bool disableTracking = true);
 
     /// <summary>

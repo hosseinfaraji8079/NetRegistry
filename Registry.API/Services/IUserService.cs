@@ -5,5 +5,5 @@ namespace Registry.API.Services;
 
 public interface IUserService
 {
-    Task<string> RegisterUserAsync(AddUserDto user);
+    Task<string> GetTokenUserAsync(AddUserDto user);
 }

@@ -15,6 +15,11 @@ public class BaseRepository<T> : IAsyncRepository<T> where T : EntityBase
         _dbContext = dbContext;
     }
 
+    public IQueryable<T> GetQueryableAsync(bool disableTracking = true)
+    {
+        return _dbContext.Set<T>().AsQueryable();
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(bool disableTracking = true)
     {
         var query = _dbContext.Set<T>().AsQueryable();

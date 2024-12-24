@@ -38,7 +38,8 @@ public class RegistryService(IRegistryRepository repository,IMapper mapper) : IR
         if (registry is null) throw new ApplicationException($"not found registry by id {accept.Id}");
 
         registry.Status = RegistryStatus.AwaitingPayment;
-
+        registry.Model = accept.Model;
+        
         await repository.UpdateAsync(registry);
     }
 }

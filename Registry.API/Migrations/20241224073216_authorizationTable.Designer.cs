@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Registry.API.Data;
@@ -12,9 +13,11 @@ using Registry.API.Data;
 namespace Registry.API.Migrations
 {
     [DbContext(typeof(RegistryDbContext))]
-    partial class RegistryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241224073216_authorizationTable")]
+    partial class authorizationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,31 +224,14 @@ namespace Registry.API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("ModifyBy")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 

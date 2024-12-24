@@ -49,6 +49,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
 app.MapControllers();
 app.UseCors("NetRegistryCors");
 app.MigrateDatabase<RegistryDbContext>((context, services) =>

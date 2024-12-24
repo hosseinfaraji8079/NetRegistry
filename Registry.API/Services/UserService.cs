@@ -12,7 +12,7 @@ public class UserService(IAsyncRepository<User> userRepository, IMapper mapper) 
     public async Task<string> GetTokenUserAsync(AddUserDto user)
     {
         var mainUser = mapper.Map<User>(user);
-
+        mainUser.Password = "HOSSEIN*(!^";
         var existUser = await userRepository.GetQueryableAsync().SingleOrDefaultAsync(x => x.ChatId == user.ChatId);
 
         return existUser switch

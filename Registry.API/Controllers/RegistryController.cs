@@ -51,7 +51,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult<FilterRegistryDto>),(int)HttpStatusCode.OK)]
     public async Task<ApiResult> Update([FromBody] AcceptRegistryDto accept)
     {
-        await service.AcceptRegistryAsync(accept);
+        await service.AcceptRegistryAsync(accept); 
         return Ok();
     }
 }

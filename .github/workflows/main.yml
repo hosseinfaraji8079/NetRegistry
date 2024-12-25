@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           debug: true
           script: |
-            cd /var/registry
+            cd /var/registry/NetRegistry
             git pull
             docker-compose down
             docker-compose build

@@ -19,8 +19,11 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           debug: true
           script: |
-           cd /var/registry
-           git pull origin main
+            cd /var/registry
+            git pull
+            docker-compose down
+            docker-compose build
+            docker-compose up -d

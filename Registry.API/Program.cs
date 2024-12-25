@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Registry.API.Data;
 using Registry.API.Extensions;
 using Registry.API.Filters;
+using Registry.API.Hubs;
 using Registry.API.Repositories.implementations;
 using Registry.API.Repositories.Interfaces;
 using Registry.API.Services;
@@ -93,6 +94,8 @@ builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -108,7 +111,11 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 app.UseCors("NetRegistryCors");
+
+app.MapHub<UsersHubs>("/usersHubs");
+
 app.MigrateDatabase<RegistryDbContext>((context, services) =>
 {
     var logger = services.GetService<ILogger<RegistryDbContext>>();

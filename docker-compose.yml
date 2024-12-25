@@ -11,11 +11,11 @@
       - postgres
   postgres:
     image: postgres:15
-    container_name: dev_postgres
+    container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: embedded_db
+      POSTGRES_DB: reigstry_db
     ports:
       - "5432:5432"
     volumes:

@@ -48,4 +48,9 @@ public class User : EntityBase
     /// Gets or sets the roles associated with the user.
     /// </summary>
     public ICollection<UserRole>? UserRoles { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of registries associated with the user.
+    /// </summary>
+    public ICollection<Registry>? Registries { get; set; }
 }

@@ -16,7 +16,7 @@ namespace Registry.API.Extensions
                 var services = scope.ServiceProvider;
                 var logger = services.GetRequiredService<ILogger<TContext>>();
                 var context = services.GetService<TContext>();
-
+                
                 try
                 {
                     logger.LogInformation("migrating started for pg sql server");

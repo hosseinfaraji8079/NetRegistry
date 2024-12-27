@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Registry.API.Data;
@@ -12,9 +13,11 @@ using Registry.API.Data;
 namespace Registry.API.Migrations
 {
     [DbContext(typeof(RegistryDbContext))]
-    partial class RegistryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241227135133_inital")]
+    partial class inital
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,7 +131,12 @@ namespace Registry.API.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("text[]");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Registries");
                 });
@@ -299,6 +307,17 @@ namespace Registry.API.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("Registry.API.Models.Registry", b =>
+                {
+                    b.HasOne("Registry.API.Models.User", "User")
+                        .WithMany("Registries")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Registry.API.Models.RolePermission", b =>
                 {
                     b.HasOne("Registry.API.Models.Permission", "Permission")
@@ -351,6 +370,8 @@ namespace Registry.API.Migrations
 
             modelBuilder.Entity("Registry.API.Models.User", b =>
                 {
+                    b.Navigation("Registries");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

@@ -8,19 +8,32 @@
       context: .
       dockerfile: Registry.API/Dockerfile
     depends_on:
-      - postgres
-  postgres:
-    image: postgres:15
-    container_name: postgres
+      - registryDB
+      
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@aspnetrun.com
+      - PGADMIN_DEFAULT_PASSWORD=admin1234
+    restart: always
+    ports:
+      - "5050:80"
+    depends_on:
+      - registryDB
+
+  registryDB:
+    image: postgres
+    container_name: postgresDb
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: reigstry_db
+      POSTGRES_DB: registry_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
 
 volumes:
   postgres_data:

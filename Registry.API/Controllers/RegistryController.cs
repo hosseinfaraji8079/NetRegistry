@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Registry.API.Extensions;
 using Registry.API.Filters;
 using Registry.API.Services;
 using Registry.API.ViewModel;
@@ -24,7 +25,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult),(int)HttpStatusCode.OK)]
     public async Task<ApiResult> Post([FromBody] AddRegistryDto registry)
     {
-        await service.AddAsync(registry);
+        await service.AddAsync(registry,User.GetId());
         return Ok();
     }
     
@@ -38,7 +39,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult<FilterRegistryDto>),(int)HttpStatusCode.OK)]
     public async Task<ApiResult<FilterRegistryDto>> Get([FromQuery] FilterRegistryDto filter)
     {
-        return Ok(await service.FilterAsync(filter));
+        return Ok(await service.FilterAsync(filter,User.GetId()));
     }
 
     /// <summary>

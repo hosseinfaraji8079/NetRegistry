@@ -5,7 +5,7 @@
       - "80:80"
       - "443:443"
     volumes:
-      - ./Registry.API/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./Registry.API/Nginx/nginx.conf:/etc/nginx/nginx.conf
     restart: unless-stopped
     networks:
       - nginx-network

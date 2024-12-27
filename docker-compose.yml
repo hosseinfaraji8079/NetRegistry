@@ -1,4 +1,16 @@
 ﻿services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Registry.API/nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - nginx-network
+
   registry.api:
     image: registry.api
     ports:
@@ -9,8 +21,9 @@
       dockerfile: Registry.API/Dockerfile
     depends_on:
       - registryDB
-      
-      
+    networks:
+      - nginx-network
+  
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -34,6 +47,12 @@
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nginx-network
 
 volumes:
   postgres_data:
+    
+networks:
+  nginx-network:
+    driver: bridge

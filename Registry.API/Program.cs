@@ -166,6 +166,7 @@ app.MapControllers();
 app.UseCors("CorsPolicy");
 
 app.MapHub<UsersHubs>("/usersHubs");
+app.UseHttpsRedirection();
 
 app.MigrateDatabase<RegistryDbContext>((context, services) =>
 {

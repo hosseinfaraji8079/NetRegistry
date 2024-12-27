@@ -5,7 +5,9 @@
       - "80:80"
       - "443:443"
     volumes:
-      - ./Nginx:/var/registry/NetRegistry/Registry.API/Nginx
+      - /var/registry/Registry.API/Nginx/nginx.conf:/etc/nginx.conf
+      - /var/registry/Registry.API/Nginx/dev.samanii.key:/etc/certificate/dev.samanii.key
+      - /var/registry/Registry.API/Nginx/dev.samanii.cer:/etc/certificate/dev.samanii.cer
     restart: unless-stopped
     networks:
       - nginx-network

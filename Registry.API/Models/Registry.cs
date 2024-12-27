@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Registry.API.Common;
 using Registry.API.Enums;
 
@@ -73,4 +74,16 @@ public class Registry : EntityBase
     /// Default value is <see cref="RegistryStatus.PendingReview"/>.
     /// </summary>
     public RegistryStatus Status { get; set; } = RegistryStatus.PendingReview;
+
+    /// <summary>
+    /// Gets or sets the user associated with this entity.
+    /// </summary>
+    public User User { get; set; }
+
+    /// <summary>
+    /// Gets or sets the unique identifier for the user. 
+    /// This property serves as a foreign key referencing the <see cref="User"/> entity.
+    /// </summary>
+    [ForeignKey(nameof(User))]
+    public long UserId { get; set; }
 }

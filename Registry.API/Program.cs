@@ -1,10 +1,14 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Registry.API.Data;
+using Registry.API.Enums;
 using Registry.API.Extensions;
 using Registry.API.Filters;
 using Registry.API.Hubs;
@@ -56,14 +60,23 @@ builder.Services.AddScoped<ExceptionFilter>();
 
 builder.Services.AddCors(option =>
 {
-    option.DefaultPolicyName = "NetRegistryCors";
-    option.AddDefaultPolicy(configure =>
+    // option.DefaultPolicyName = "NetRegistryCors";
+    // option.AddDefaultPolicy(configure =>
+    // {
+    //     configure.AllowAnyHeader();
+    //     configure.AllowAnyMethod();
+    //     configure.AllowAnyOrigin();
+    // });
+    
+    option.AddPolicy("CorsPolicy", policy =>
     {
-        configure.AllowAnyHeader();
-        configure.AllowAnyMethod();
-        configure.AllowAnyOrigin();
+        policy
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .SetIsOriginAllowed(origin => true);
     });
-});
+}); 
 
 builder.Services.AddAuthentication(opt =>
     {
@@ -72,6 +85,43 @@ builder.Services.AddAuthentication(opt =>
     })
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                string? accessToken = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    accessToken = context.Request.Query["access_token"];
+                }
+
+                if (accessToken != null)
+                {
+                    var tokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = context.HttpContext.RequestServices
+                            .GetRequiredService<IConfiguration>()["JWT:ValidIssuer"],
+                        ValidAudience = context.HttpContext.RequestServices
+                            .GetRequiredService<IConfiguration>()["JWT:ValidAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                            context.HttpContext.RequestServices.GetRequiredService<IConfiguration>()["JWT:SecurityKey"]))
+                    };
+
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var principal = handler.ValidateToken(accessToken, tokenValidationParameters, out _);
+                    context.HttpContext.User = principal;
+                    context.Token = accessToken;
+                }
+                
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -112,7 +162,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.UseCors("NetRegistryCors");
+// app.UseCors("NetRegistryCors");
+app.UseCors("CorsPolicy");
 
 app.MapHub<UsersHubs>("/usersHubs");
 

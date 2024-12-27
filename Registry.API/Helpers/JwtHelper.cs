@@ -25,7 +25,7 @@ public static class JwtHelper
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim("ChatId", user.ChatId.ToString()),
             },
-            expires: DateTime.Now.AddMinutes(1),
+            expires: DateTime.Now.AddMinutes(50000),
             signingCredentials: signinCredentials
         );
 

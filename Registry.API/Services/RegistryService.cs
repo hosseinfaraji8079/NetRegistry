@@ -9,9 +9,11 @@ namespace Registry.API.Services;
 
 public class RegistryService(IRegistryRepository repository,IMapper mapper) : IRegistryService
 {
-    public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter)
+    public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter,long? userId)
     {
         Expression<Func<Models.Registry, bool>> predicate = x => true;
+
+        if (userId is not null) predicate = x => x.UserId == userId;
         
         var data = await repository.GetAsync(predicate,true);
         
@@ -21,11 +23,12 @@ public class RegistryService(IRegistryRepository repository,IMapper mapper) : IR
         return filter;
     }
 
-    public async Task AddAsync(AddRegistryDto registry)
+    public async Task AddAsync(AddRegistryDto registry,long userId)
     {
         var main = mapper.Map<Models.Registry>(registry);
-    
-        if (await repository.ExistsAsync(x => x.ImeI_1 == registry.ImeI_1 || x.ImeI_2 == registry.ImeI_2))
+        main.UserId = userId;
+        
+        if (await repository.ExistsAsync(x => x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2))
             throw new ValidationException("شماره IMEI وارد شده قبلاً ثبت شده است.");
         
         await repository.AddAsync(main);

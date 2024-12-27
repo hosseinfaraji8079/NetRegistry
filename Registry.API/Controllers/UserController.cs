@@ -9,17 +9,19 @@ using Registry.API.ViewModel;
 
 namespace Registry.API.Controllers;
 
-public class UserController(IUserService userService,UsersHubs usersHubs) : DefaultController 
+public class UserController(IUserService userService) : DefaultController 
 {
-    [Authorize]
     [HttpGet]
     [ProducesResponseType(typeof(ApiResult<List<long>>),(int)HttpStatusCode.OK)]
     public ApiResult<List<long>> Get()
     {
-        return Ok(usersHubs.UserIdAsync());
+        var s = HttpContext.User;
+        var d = User;
+        return Ok(1);
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResult<string>),(int)HttpStatusCode.OK)]
     public async Task<ApiResult<string>> Post([FromBody] AddUserDto user)
     {

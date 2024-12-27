@@ -156,7 +156,11 @@ var app = builder.Build();
 
 app.MapOpenApi();
 app.UseSwagger();
-app.UseSwaggerUI();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

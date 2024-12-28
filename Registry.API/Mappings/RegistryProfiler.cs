@@ -11,5 +11,6 @@ public class RegistryProfiler : Profile
         CreateMap<AddRegistryDto, Models.Registry>();
         CreateMap<User, AddUserDto>().ReverseMap();
         CreateMap<RegistryDto, Models.Registry>().ReverseMap();
+        CreateMap<User, UserDto>().ReverseMap();
     }
 }

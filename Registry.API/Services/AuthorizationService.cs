@@ -8,17 +8,13 @@ public class AuthorizationService(IUserRoleRepository userRoleRepository) : IAut
 {
     public async Task<bool> HasUserPermission(long userId, string permissionName)
     {
-        return await userRoleRepository.GetAsync(
-            userRole => userRole.UserId == userId && !userRole.IsDelete,
-            includes: new List<Expression<Func<UserRole, object>>>
-            {
-                ur => ur.Role!,
-                ur => ur.Role.RolePermissions,
-                ur => ur.Role.RolePermissions.Select(rp => rp.Permission)
-            }
-        ).ContinueWith(task => task.Result.Any(userRole =>
-            userRole.Role.RolePermissions.Any(rolePermission =>
-                rolePermission.Permission.SystemName == permissionName)));
-    }
+        var userRoles = await userRoleRepository.GetAsync(
+            ur => ur.UserId == userId && !ur.IsDelete,
+            includeString: "Role.RolePermissions.Permission"
+        );
 
+        return userRoles.Any(userRole =>
+            userRole.Role.RolePermissions.Any(rp =>
+                rp.Permission != null && rp.Permission.SystemName == permissionName));
+    }
 }

@@ -6,17 +6,19 @@ using Registry.API.Filters;
 using Registry.API.Hubs;
 using Registry.API.Services;
 using Registry.API.ViewModel;
+using IAuthorizationService = Registry.API.Services.IAuthorizationService;
 
 namespace Registry.API.Controllers;
 
-public class UserController(IUserService userService) : DefaultController 
+public class UserController(IUserService userService,IAuthorizationService authorizationService) : DefaultController 
 {
     [HttpGet]
     [ProducesResponseType(typeof(ApiResult<List<long>>),(int)HttpStatusCode.OK)]
-    public ApiResult<List<long>> Get()
+    public async Task<ApiResult<List<long>>> Get()
     {
         var s = HttpContext.User;
-        var d = User;
+       var d = User;
+       var dd = await authorizationService.HasUserPermission(1, "supporter");
         return Ok(1);
     }
 

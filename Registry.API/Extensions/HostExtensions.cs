@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Npgsql;
 using Microsoft.EntityFrameworkCore;
 
 namespace Registry.API.Extensions
@@ -19,14 +19,16 @@ namespace Registry.API.Extensions
                 
                 try
                 {
-                    logger.LogInformation("migrating started for pg sql server");
+                    logger.LogInformation("Migrating PostgreSQL database started.");
                     InvokeSeeder(seeder, context, services);
-                    logger.LogInformation("migrating has been done pg sql server");
+                    
+                    
+                    
+                    logger.LogInformation("PostgreSQL database migration completed.");
                 }
-                catch (SqlException ex)
+                catch (PostgresException ex)
                 {
-                    logger.LogError(ex, "an error occurred while migrating database");
-
+                    logger.LogError(ex, "An error occurred while migrating the PostgreSQL database.");
                     if (retryForAvailability < 50)
                     {
                         retryForAvailability++;

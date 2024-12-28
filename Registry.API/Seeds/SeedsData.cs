@@ -15,7 +15,7 @@ public static class SeedsData
 /// <summary>
 /// user item for seed data
 /// </summary>
-public abstract class UsersItems
+public static class UsersItems
 {
     public static List<User> Users = new()
     {
@@ -27,8 +27,11 @@ public abstract class UsersItems
             FirstName = "Admin",
             LastName = "Adminy",
             UserName = "Hossein FARAJI",
-            CreateDate = DateTime.UtcNow,
             IsDelete = false,
+            CreateBy = 1,
+            ModifyBy = 1,
+            ModifiedDate = DateTime.UtcNow,
+            CreateDate = DateTime.UtcNow,
         }
     };
 }
@@ -37,7 +40,7 @@ public abstract class UsersItems
 /// <summary>
 /// authentication and authorization items
 /// </summary>
-public abstract class AuthItems
+public static class AuthItems
 {
     public static List<Role> Roles = new()
     {
@@ -47,6 +50,9 @@ public abstract class AuthItems
             Title = "Supporter",
             CreateDate = DateTime.UtcNow,
             IsDelete = false,
+            ModifiedDate = DateTime.UtcNow,
+            CreateBy = 1,
+            ModifyBy = 1,
         }
     };
 

@@ -14,6 +14,7 @@ using Registry.API.Filters;
 using Registry.API.Hubs;
 using Registry.API.Repositories.implementations;
 using Registry.API.Repositories.Interfaces;
+using Registry.API.Seeds;
 using Registry.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -175,4 +176,5 @@ app.UseHttpsRedirection();
 app.MigrateDatabase<RegistryDbContext>((context, services) =>
 {
     var logger = services.GetService<ILogger<RegistryDbContext>>();
+    RegistryDbContextSeeds.SeedAsync(context, logger).Wait();
 }).Run();

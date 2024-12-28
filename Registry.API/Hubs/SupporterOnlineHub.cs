@@ -34,4 +34,9 @@ public class SupporterOnlineHub(IUserService userService,IAuthorizationService a
         await Clients.All.SendAsync("UpdateSupporterOnline", Supporters);
         await base.OnDisconnectedAsync(exception);
     }
+
+    public Task<List<UserDto>> GetOnlineSupporterAsync()
+    {
+        return Task.FromResult(Supporters);
+    }
 }

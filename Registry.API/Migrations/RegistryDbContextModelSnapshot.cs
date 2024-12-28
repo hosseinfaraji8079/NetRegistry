@@ -64,6 +64,19 @@ namespace Registry.API.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateBy = 0L,
+                            CreateDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(4401),
+                            IsDelete = false,
+                            ModifiedDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(3997),
+                            ModifyBy = 0L,
+                            SystemName = "supporter",
+                            Title = "supporter"
+                        });
                 });
 
             modelBuilder.Entity("Registry.API.Models.Registry", b =>
@@ -169,6 +182,18 @@ namespace Registry.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateBy = 0L,
+                            CreateDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(3063),
+                            IsDelete = false,
+                            ModifiedDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(2839),
+                            ModifyBy = 0L,
+                            Title = "Supporter"
+                        });
                 });
 
             modelBuilder.Entity("Registry.API.Models.RolePermission", b =>
@@ -207,6 +232,19 @@ namespace Registry.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RolePermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateBy = 0L,
+                            CreateDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(4933),
+                            IsDelete = false,
+                            ModifiedDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(4610),
+                            ModifyBy = 0L,
+                            PermissionId = 1L,
+                            RoleId = 1L
+                        });
                 });
 
             modelBuilder.Entity("Registry.API.Models.User", b =>
@@ -255,6 +293,22 @@ namespace Registry.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ChatId = 5246606864L,
+                            CreateBy = 0L,
+                            CreateDate = new DateTime(2024, 12, 28, 10, 24, 24, 342, DateTimeKind.Utc).AddTicks(3658),
+                            FirstName = "Admin",
+                            IsDelete = false,
+                            LastName = "Adminy",
+                            ModifiedDate = new DateTime(2024, 12, 28, 10, 24, 24, 342, DateTimeKind.Utc).AddTicks(2746),
+                            ModifyBy = 0L,
+                            Password = "hossein898989",
+                            UserName = "Hossein FARAJI"
+                        });
                 });
 
             modelBuilder.Entity("Registry.API.Models.UserRole", b =>
@@ -293,6 +347,19 @@ namespace Registry.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateBy = 0L,
+                            CreateDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(3588),
+                            IsDelete = false,
+                            ModifiedDate = new DateTime(2024, 12, 28, 10, 24, 24, 344, DateTimeKind.Utc).AddTicks(3287),
+                            ModifyBy = 0L,
+                            RoleId = 1L,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("Registry.API.Models.Permission", b =>

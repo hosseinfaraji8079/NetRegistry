@@ -38,7 +38,7 @@ public class RegistryDbContextSeeds
         
         if (!await context.RolePermissions.AnyAsync(x=>x.Id == 1))
         {
-            await context.Permissions.AddRangeAsync(Permissions());
+            await context.RolePermissions.AddRangeAsync(RolePermissions());
             await context.SaveChangesAsync();
             logger.LogInformation("permissions roles seed items");
         }

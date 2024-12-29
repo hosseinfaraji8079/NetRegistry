@@ -2,47 +2,93 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Registry.API.Enums;
+using Registry.API.Models;
 using Registry.API.Repositories.Interfaces;
 using Registry.API.ViewModel;
 
 namespace Registry.API.Services;
 
-public class RegistryService(IRegistryRepository repository,IMapper mapper) : IRegistryService
+public class RegistryService(
+    IRegistryRepository repository,
+    IMapper mapper,
+    ILogger<RegistryService> logger,
+    IAsyncRepository<RejectionReason> rejectionRepository) : IRegistryService
 {
-    public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter,long? userId)
+    public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter, long? userId)
     {
         Expression<Func<Models.Registry, bool>> predicate = x => true;
 
         if (userId is not null) predicate = x => x.UserId == userId;
-        
-        var data = await repository.GetAsync(predicate,true);
-        
+
+        var data = await repository.GetAsync(predicate, true);
+
         var mappedData = mapper.Map<IEnumerable<RegistryDto>>(data);
-        
+
         await filter.Paging(mappedData);
         return filter;
     }
 
-    public async Task AddAsync(AddRegistryDto registry,long userId)
+    public async Task AddAsync(AddRegistryDto registry, long userId)
     {
         var main = mapper.Map<Models.Registry>(registry);
         main.UserId = userId;
-        
+
         if (await repository.ExistsAsync(x => x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2))
             throw new ValidationException("شماره IMEI وارد شده قبلاً ثبت شده است.");
-        
+
         await repository.AddAsync(main);
     }
 
-    public async Task AcceptRegistryAsync(AcceptRegistryDto accept)
+    public async Task ProcessRegistryDecisionAsync(RegistryDecisionDto decisionDto)
     {
-        var registry = await repository.GetByIdAsync(accept.Id);
+        logger.LogInformation("Processing registry entry with ID: {RegistryId}", decisionDto.Id);
 
-        if (registry is null) throw new ApplicationException($"not found registry by id {accept.Id}");
+        var registry = await repository.GetByIdAsync(decisionDto.Id);
 
-        registry.Status = RegistryStatus.AwaitingPayment;
-        registry.Model = accept.Model;
-        
-        await repository.UpdateAsync(registry);
+        if (registry == null)
+        {
+            logger.LogWarning("Registry entry with ID {RegistryId} not found.", decisionDto.Id);
+            throw new ApplicationException("Registry not found.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(decisionDto.Model))
+        {
+            registry.Model = decisionDto.Model;
+            registry.Status = RegistryStatus.AwaitingPayment;
+
+            await repository.UpdateAsync(registry);
+            logger.LogInformation("Registry entry with ID {RegistryId} accepted successfully.", decisionDto.Id);
+        }
+        else
+        {
+            // Reject the registry
+            if (!decisionDto.PredefinedRejectionReasonId.HasValue)
+            {
+                logger.LogWarning("Rejection reason ID not provided for registry ID {RegistryId}.", decisionDto.Id);
+                throw new ApplicationException("Predefined rejection reason ID is required.");
+            }
+
+            var rejectionReason = await rejectionRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId.Value);
+            if (rejectionReason == null)
+            {
+                logger.LogWarning("Predefined rejection reason with ID {ReasonId} not found.",
+                    decisionDto.PredefinedRejectionReasonId.Value);
+                throw new ApplicationException("Invalid rejection reason ID.");
+            }
+
+            registry.Status = RegistryStatus.Rejected;
+
+            var rejection = new RejectionReason
+            {
+                RegistryId = registry.Id,
+                PredefinedRejectionReasonId = rejectionReason.Id,
+                AdditionalExplanation = decisionDto.AdditionalExplanation
+            };
+
+            await rejectionRepository.AddAsync(rejection);
+            await repository.UpdateAsync(registry);
+
+            logger.LogInformation("Registry entry with ID {RegistryId} rejected successfully.", decisionDto.Id);
+        }
     }
 }

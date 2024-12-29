@@ -63,6 +63,12 @@ public class Registry : EntityBase
     public long? Price { get; set; }
 
     /// <summary>
+    /// payment link
+    /// </summary>
+    [MaxLength(500)]
+    public string? PaymentLink { get; set; }
+
+    /// <summary>
     /// Gets or sets the list of transaction image URLs or paths.
     /// This is an optional field and can be null.
     /// </summary>
@@ -86,4 +92,9 @@ public class Registry : EntityBase
     /// </summary>
     [ForeignKey(nameof(User))]
     public long UserId { get; set; }
+    
+    /// <summary>
+    /// Navigation property to the list of rejection reasons associated with this registry.
+    /// </summary>
+    public List<RejectionReason>? RejectionReasons { get; set; }
 }

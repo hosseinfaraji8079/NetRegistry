@@ -23,12 +23,11 @@ public interface IRegistryService
     /// <param name="userId">The registry for who</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task AddAsync(AddRegistryDto registry,long userId);
-
+    
     /// <summary>
-    /// Accepts a registry request by processing the provided data.
-    /// This method is typically used to approve or process pending registry entries.
+    /// Processes a registry entry by accepting or rejecting it based on the provided data.
     /// </summary>
-    /// <param name="accept">The data required to accept the registry request, including necessary identifiers and metadata.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    Task AcceptRegistryAsync(AcceptRegistryDto accept);
+    /// <param name="decisionDto">The data to process the registry entry.</param>
+    /// <returns>An indicating the outcome of the operation.</returns>
+    Task ProcessRegistryDecisionAsync(RegistryDecisionDto decisionDto);
 }

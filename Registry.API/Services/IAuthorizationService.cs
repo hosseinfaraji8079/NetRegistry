@@ -15,4 +15,14 @@ public interface IAuthorizationService
     /// The task result contains <c>true</c> if the user has the specified permission; otherwise, <c>false</c>.
     /// </returns>
     Task<bool> HasUserPermission(long userId, string permissionName);
+    
+    /// <summary>
+    /// Retrieves the list of all permissions assigned to a specific user.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains a list of permission names assigned to the user.
+    /// </returns>
+    Task<List<string>> GetUserPermissions(long userId);
 }

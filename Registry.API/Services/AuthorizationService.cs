@@ -17,4 +17,20 @@ public class AuthorizationService(IUserRoleRepository userRoleRepository) : IAut
             userRole.Role.RolePermissions.Any(rp =>
                 rp.Permission != null && rp.Permission.SystemName == permissionName));
     }
+
+    public async Task<List<string>> GetUserPermissions(long userId)
+    {
+        var userRoles = await userRoleRepository.GetAsync(
+            ur => ur.UserId == userId && !ur.IsDelete,
+            includeString: "Role.RolePermissions.Permission"
+        );
+
+        var permissions = userRoles
+            .SelectMany(userRole => userRole.Role.RolePermissions)
+            .Where(rp => rp.Permission != null)
+            .Select(rp => rp.Permission.SystemName)
+            .Distinct();
+
+        return permissions.ToList();
+    }
 }

@@ -14,6 +14,10 @@ public class RegistryDbContext(DbContextOptions<RegistryDbContext> options) : Db
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
 
+    public DbSet<RejectionReason> RejectionReasons { get; set; }
+
+    public DbSet<PredefinedRejectionReason> PredefinedRejectionReasons { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))

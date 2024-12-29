@@ -144,6 +144,7 @@ builder.Services.AddScoped<IRegistryService, RegistryService>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPredefinedRejectionReasonService, PredefinedRejectionReasonService>();
 
 builder.Services.AddSignalR();
 

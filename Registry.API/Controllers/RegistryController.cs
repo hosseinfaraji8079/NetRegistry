@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Registry.API.Extensions;
 using Registry.API.Filters;
 using Registry.API.Services;
 using Registry.API.Utilities;
 using Registry.API.ViewModel;
+
 
 namespace Registry.API.Controllers;
 
@@ -41,7 +41,21 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult<FilterRegistryDto>), (int)HttpStatusCode.OK)]
     public async Task<ApiResult<FilterRegistryDto>> Get([FromQuery] FilterRegistryDto filter)
     {
-        return Ok(await service.FilterAsync(filter, User.GetId()));
+        return Ok(await service.FilterAsync(filter,User.GetId()));
+    }
+    
+    /// <summary>
+    /// Retrieves a filtered list of registry entries.
+    /// get all registries for supporter
+    /// </summary>
+    /// <param name="filter">The filtering criteria as a <see cref="FilterRegistryDto"/> object.</param>
+    /// <returns>An <see cref="IActionResult"/> containing the filtered list of registry entries.</returns>
+    [HttpGet("get-all")]
+    [ProducesResponseType(typeof(ApiResult<FilterRegistryDto>), (int)HttpStatusCode.OK)]
+    [PermissionChecker("supporter")]
+    public async Task<ApiResult<FilterRegistryDto>> GetAll([FromQuery] FilterRegistryDto filter)
+    {
+        return Ok(await service.FilterAsync(filter,null));
     }
     
     /// <summary>

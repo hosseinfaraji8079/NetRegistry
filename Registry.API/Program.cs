@@ -68,7 +68,7 @@ builder.Services.AddCors(option =>
     //     configure.AllowAnyMethod();
     //     configure.AllowAnyOrigin();
     // });
-    
+
     option.AddPolicy("CorsPolicy", policy =>
     {
         policy
@@ -77,7 +77,7 @@ builder.Services.AddCors(option =>
             .AllowCredentials()
             .SetIsOriginAllowed(origin => true);
     });
-}); 
+});
 
 builder.Services.AddAuthentication(opt =>
     {
@@ -91,7 +91,7 @@ builder.Services.AddAuthentication(opt =>
             OnMessageReceived = context =>
             {
                 string? accessToken = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-                
+
                 if (string.IsNullOrEmpty(accessToken))
                 {
                     accessToken = context.Request.Query["access_token"];
@@ -110,7 +110,8 @@ builder.Services.AddAuthentication(opt =>
                         ValidAudience = context.HttpContext.RequestServices
                             .GetRequiredService<IConfiguration>()["JWT:ValidAudience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                            context.HttpContext.RequestServices.GetRequiredService<IConfiguration>()["JWT:SecurityKey"]))
+                            context.HttpContext.RequestServices
+                                .GetRequiredService<IConfiguration>()["JWT:SecurityKey"]))
                     };
 
 
@@ -119,7 +120,7 @@ builder.Services.AddAuthentication(opt =>
                     context.HttpContext.User = principal;
                     context.Token = accessToken;
                 }
-                
+
                 return Task.CompletedTask;
             }
         };
@@ -138,7 +139,7 @@ builder.Services.AddAuthentication(opt =>
     });
 
 
-builder.Services.AddTransient(typeof(IAsyncRepository<>),typeof(BaseRepository<>));
+builder.Services.AddTransient(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
@@ -159,10 +160,7 @@ var app = builder.Build();
 app.MapOpenApi();
 app.UseSwagger();
 
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-});
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -173,6 +171,7 @@ app.UseCors("CorsPolicy");
 
 app.MapHub<UsersHubs>("/usersHubs");
 app.MapHub<SupporterOnlineHub>("/supporterOnlineHub");
+app.MapHub<PaymentHubs>("/paymentHub");
 
 app.UseHttpsRedirection();
 

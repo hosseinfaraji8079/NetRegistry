@@ -76,7 +76,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
     public async Task<ApiResult> SendPriceAndLink([FromBody] SendPriceAndLinkForPaymentDto accept)
     {
-        // await service.AcceptRegistryAsync(accept); 
+        await service.SendPriceAndLink(accept); 
         return Ok();
     }
 }

@@ -30,4 +30,6 @@ public interface IRegistryService
     /// <param name="decisionDto">The data to process the registry entry.</param>
     /// <returns>An indicating the outcome of the operation.</returns>
     Task ProcessRegistryDecisionAsync(RegistryDecisionDto decisionDto);
+
+    Task SendPriceAndLink(SendPriceAndLinkForPaymentDto accept);
 }

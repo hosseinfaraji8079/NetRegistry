@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
+using System.Runtime.Intrinsics.X86;
 using AutoMapper;
 using Registry.API.Enums;
 using Registry.API.Models;
@@ -33,7 +34,8 @@ public class RegistryService(
         var main = mapper.Map<Models.Registry>(registry);
         main.UserId = userId;
 
-        if (await repository.ExistsAsync(x => x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2))
+        if (await repository.ExistsAsync(x =>
+                (x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2) && x.Status != RegistryStatus.Rejected))
             throw new ValidationException("شماره IMEI وارد شده قبلاً ثبت شده است.");
 
         await repository.AddAsync(main);
@@ -90,5 +92,10 @@ public class RegistryService(
 
             logger.LogInformation("Registry entry with ID {RegistryId} rejected successfully.", decisionDto.Id);
         }
+    }
+    
+    public Task SendPriceAndLink(SendPriceAndLinkForPaymentDto accept)
+    {
+        throw new NotImplementedException();
     }
 }

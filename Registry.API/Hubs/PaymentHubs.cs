@@ -163,4 +163,14 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
             await Clients.Caller.SendAsync("Error", $"Registry with ID {registryId} not found or already processed.");
         }
     }
+    
+    /// <summary>
+    /// Retrieves all registries currently in the system.
+    /// </summary>
+    /// <returns>A list of all RegistryDto items.</returns>
+    public Task<List<RegistryDto>> GetAllRegistries()
+    {
+        var allRegistries = _pendingRegistries.Values.ToList();
+        return Task.FromResult(allRegistries);
+    }
 }

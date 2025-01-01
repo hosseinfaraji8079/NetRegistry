@@ -1,4 +1,5 @@
-﻿using Registry.API.ViewModel;
+﻿using Registry.API.Filters;
+using Registry.API.ViewModel;
 
 namespace Registry.API.Services;
 
@@ -31,5 +32,17 @@ public interface IRegistryService
     /// <returns>An indicating the outcome of the operation.</returns>
     Task ProcessRegistryDecisionAsync(RegistryDecisionDto decisionDto);
 
+    /// <summary>
+    /// Sends the price and payment link to the user based on the provided details.
+    /// </summary>
+    /// <param name="accept">An instance of <see cref="SendPriceAndLinkForPaymentDto"/> containing the required data to generate and send the payment link.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation to send the price and link.</returns>
     Task SendPriceAndLink(SendPriceAndLinkForPaymentDto accept);
+
+    /// <summary>
+    /// Retrieves a unique identifier (UID) for a specific operation or transaction based on the provided ID.
+    /// </summary>
+    /// <param name="id">The unique identifier associated with the request.</param>
+    /// <returns>A <see cref="Task{TResult}"/> containing an <see cref="ApiResult{T}"/> with the generated unique identifier as a string.</returns>
+    Task<string?> GetUniqueIdAsync(long id);
 }

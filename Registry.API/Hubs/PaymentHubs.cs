@@ -20,6 +20,17 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
     private static ConcurrentDictionary<long, RegistryDto> _pendingRegistries = new();
     
     /// <summary>
+    /// Called when a client connects. 
+    /// If the user has a "supporter" permission, they are added to the online supporters list.
+    /// All clients are notified of the updated supporter list.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public override async Task OnConnectedAsync()
+    {
+        await base.OnConnectedAsync();
+    }
+    
+    /// <summary>
     /// Handles the event when a client disconnects from the hub.
     /// If the client has any pending registries, their prices are set to 0 (canceled).
     /// </summary>
@@ -43,8 +54,7 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
                 registry.Price = 0;
                 registry.Status = RegistryStatus.Rejected;
 
-                logger.LogInformation(
-                    "Registry {RegistryId} for User {UserId} has been cancelled due to disconnection.", registryId,
+                logger.LogInformation("Registry {RegistryId} for User {UserId} has been cancelled due to disconnection.", registryId,
                     userId);
 
                 // Notify all clients about the updated registry

@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Runtime.Intrinsics.X86;
 using AutoMapper;
 using Registry.API.Enums;
+using Registry.API.Filters;
 using Registry.API.Models;
 using Registry.API.Repositories.Interfaces;
 using Registry.API.ViewModel;
@@ -97,5 +98,15 @@ public class RegistryService(
     public Task SendPriceAndLink(SendPriceAndLinkForPaymentDto accept)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<string?> GetUniqueIdAsync(long id)
+    {
+        var registry = await repository.GetByIdAsync(id);
+        return registry switch
+        {
+            null => throw new ApplicationException($"not found unique by id {id}"),
+            _ => registry.UniqueId,
+        };
     }
 }

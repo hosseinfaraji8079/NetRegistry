@@ -93,4 +93,19 @@ public class RegistryController(IRegistryService service) : DefaultController
         await service.SendPriceAndLink(accept); 
         return Ok();
     }
+
+    /// <summary>
+    /// Retrieves a unique identifier (UID) for a specific operation or transaction.
+    /// </summary>
+    /// <returns>An <see cref="ApiResult{T}"/> containing the unique identifier as a string.</returns>
+    /// <response code="200">Returns an OK status with the unique identifier.</response>
+    /// <response code="500">Returns an Internal Server Error if the UID cannot be generated.</response>
+    [HttpGet("SendUniqueId/{id}")]
+    [ProducesResponseType(typeof(ApiResult<string>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ApiResult<string>), (int)HttpStatusCode.InternalServerError)]
+    [PermissionChecker("supporter")]
+    public async Task<ApiResult<string>> SendUniqueId(long id)
+    {
+        return await service.GetUniqueIdAsync(id);
+    }
 }

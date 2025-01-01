@@ -58,7 +58,8 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
                     userId);
 
                 // Notify all clients about the updated registry
-                await Clients.All.SendAsync("PaymentUpdated", registry);
+                // await Clients.All.SendAsync("PaymentUpdated", registry);
+                await Clients.User(registry.UserId.ToString()).SendAsync("PaymentUpdated", registry);
 
                 // Remove from pending registries
                 _pendingRegistries.TryRemove(registryId, out _);
@@ -132,7 +133,7 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
                 registryId, price, paymentLink);
 
             // Notify all clients about the updated registry
-            await Clients.All.SendAsync("PaymentUpdated", registry);
+            await Clients.User(registry.UserId.ToString()).SendAsync("PaymentUpdated", registry);
 
             // Remove from pending registries as it's now confirmed
             _pendingRegistries.TryRemove(registryId, out _);

@@ -11,6 +11,11 @@ namespace Registry.API.Models;
 public class Registry : EntityBase
 {
     /// <summary>
+    /// Generate Unique Id For Accepts Transaction 
+    /// </summary>
+    public string? UniqueId { get; set; } = new Guid().ToString("N");
+    
+    /// <summary>
     /// Gets or sets the first IMEI number (International Mobile Equipment Identity).
     /// </summary>
     [Required(ErrorMessage = "IMEI 1 is required.")]

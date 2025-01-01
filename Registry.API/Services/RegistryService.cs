@@ -34,7 +34,8 @@ public class RegistryService(
     {
         var main = mapper.Map<Models.Registry>(registry);
         main.UserId = userId;
-
+        main.UniqueId = Guid.NewGuid().ToString("N");
+        
         if (await repository.ExistsAsync(x =>
                 (x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2) && x.Status != RegistryStatus.Rejected))
             throw new ValidationException("شماره IMEI وارد شده قبلاً ثبت شده است.");

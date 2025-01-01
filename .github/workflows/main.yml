@@ -1,29 +1,26 @@
-name: Auto Cache Busting for Changed Files
+name: Deploy on Server
 
 on:
   push:
     branches:
-      - master
+      - master # یا نام شاخه مورد نظر شما
 
 jobs:
-  cache-busting:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Show Changes
-        run: git diff
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          debug: true
-          script: |
-            cd /var/registry/NetRegistry
-            git pull
-            docker-compose down
-            docker-compose build
-            docker-compose up -d
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: 188.245.230.0 # آی‌پی سرور
+        username: root # نام کاربری سرور
+        password: HfgqhRdPsU9spubLuLsg # رمز عبور سرور (یا از SSH Key استفاده کنید)
+        script: |
+          cd /var/registry/NetRegistry
+          git pull origin main
+          docker-compose down
+          docker-compose up -d --build

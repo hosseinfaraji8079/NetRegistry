@@ -18,16 +18,16 @@ public class RegistryDbContext(DbContextOptions<RegistryDbContext> options) : Db
 
     public DbSet<PredefinedRejectionReason> PredefinedRejectionReasons { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
-        {
-            if (!relationship.IsSelfReferencing())
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Cascade;
-            }
-        }
-
-        base.OnModelCreating(modelBuilder);
-    }
+    // protected override void OnModelCreating(ModelBuilder modelBuilder)
+    // {
+    //     foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
+    //     {
+    //         if (!relationship.IsSelfReferencing())
+    //         {
+    //             relationship.DeleteBehavior = DeleteBehavior.Cascade;
+    //         }
+    //     }
+    //
+    //     base.OnModelCreating(modelBuilder);
+    // }
 }

@@ -13,8 +13,8 @@ using Registry.API.Data;
 namespace Registry.API.Migrations
 {
     [DbContext(typeof(RegistryDbContext))]
-    [Migration("20250101125126_addfiled")]
-    partial class addfiled
+    [Migration("20250102103440_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

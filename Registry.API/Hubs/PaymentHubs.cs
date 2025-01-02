@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Registry.API.Enums;
 using Registry.API.Extensions;
+using Registry.API.Models;
 using Registry.API.ViewModel;
 
 namespace Registry.API.Hubs;
@@ -141,7 +142,8 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
         else
         {
             logger.LogWarning("Attempted to confirm non-existent or already processed Registry ID {RegistryId}.", registryId);
-            await Clients.Caller.SendAsync("Error", $"Registry with ID {registryId} not found or already processed.");
+            await Clients.Caller.SendAsync("Error"
+                , $"Registry with ID {registryId} not found or already processed.");
         }
     }
 
@@ -162,7 +164,7 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
             logger.LogInformation("Registry {RegistryId} has been cancelled manually.", registryId);
 
             // Notify all clients about the updated registry
-            await Clients.All.SendAsync("PaymentUpdated", registry);
+            await Clients.User(registry.UserId.ToString()).SendAsync("PaymentUpdated", registry);
 
             // Remove from pending registries
             _pendingRegistries.TryRemove(registryId, out _);

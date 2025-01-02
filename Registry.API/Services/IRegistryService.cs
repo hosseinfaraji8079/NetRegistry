@@ -45,4 +45,18 @@ public interface IRegistryService
     /// <param name="id">The unique identifier associated with the request.</param>
     /// <returns>A <see cref="Task{TResult}"/> containing an <see cref="ApiResult{T}"/> with the generated unique identifier as a string.</returns>
     Task<string?> GetUniqueIdAsync(long id);
+    
+    /// <summary>
+    /// Marks a payment as accepted based on the provided unique identifier.
+    /// </summary>
+    /// <param name="unique">The unique identifier associated with the payment.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task AcceptedPayment(string unique);
+
+    /// <summary>
+    /// Marks a payment as rejected based on the provided unique identifier.
+    /// </summary>
+    /// <param name="unique">The unique identifier associated with the payment.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task RejectPayment(string unique);
 }

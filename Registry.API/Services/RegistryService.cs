@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Runtime.Intrinsics.X86;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Registry.API.Enums;
 using Registry.API.Filters;
 using Registry.API.Models;
@@ -35,7 +36,7 @@ public class RegistryService(
         var main = mapper.Map<Models.Registry>(registry);
         main.UserId = userId;
         main.UniqueId = Guid.NewGuid().ToString("N");
-        
+
         if (await repository.ExistsAsync(x =>
                 (x.ImeI_1 == registry.ImeI_1 && x.ImeI_2 == registry.ImeI_2) && x.Status != RegistryStatus.Rejected))
             throw new ValidationException("شماره IMEI وارد شده قبلاً ثبت شده است.");
@@ -95,7 +96,7 @@ public class RegistryService(
             logger.LogInformation("Registry entry with ID {RegistryId} rejected successfully.", decisionDto.Id);
         }
     }
-    
+
     public Task SendPriceAndLink(SendPriceAndLinkForPaymentDto accept)
     {
         throw new NotImplementedException();
@@ -109,5 +110,27 @@ public class RegistryService(
             null => throw new ApplicationException($"not found unique by id {id}"),
             _ => registry.UniqueId,
         };
+    }
+
+    public async Task AcceptedPayment(string unique)
+    {
+        var registry = await repository.GetQueryableAsync().SingleOrDefaultAsync(x => x.UniqueId == unique);
+        if (registry is null) throw new ApplicationException("not exist");
+
+        registry.UniqueId = Guid.NewGuid().ToString("N");
+        registry.Status = RegistryStatus.QueuedForOperation;
+
+        await repository.UpdateAsync(registry);
+    }
+
+    public async Task RejectPayment(string unique)
+    {
+        var registry = await repository.GetQueryableAsync().SingleOrDefaultAsync(x => x.UniqueId == unique);
+        if (registry is null) throw new ApplicationException("not exist");
+
+        registry.UniqueId = Guid.NewGuid().ToString("N");
+        registry.Status = RegistryStatus.Rejected;
+
+        await repository.UpdateAsync(registry);
     }
 }

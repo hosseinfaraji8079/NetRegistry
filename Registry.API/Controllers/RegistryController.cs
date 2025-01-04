@@ -154,7 +154,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.InternalServerError)]
     public async Task<ApiResult<RegistryDto>> GetRegistryById(long id)
     {
-        return await service.GetRegistryById(id, User.GetId());
+        return Ok(await service.GetRegistryById(id, User.GetId()));
     }
 
     /// <summary>
@@ -170,7 +170,6 @@ public class RegistryController(IRegistryService service) : DefaultController
     [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.InternalServerError)]
     [PermissionChecker("supporter")]
-    [PermissionChecker("xxxx")]
     public async Task<ApiResult<RegistryDto>> RegistryById(long id)
     {
         return await service.GetRegistryById(id, null);

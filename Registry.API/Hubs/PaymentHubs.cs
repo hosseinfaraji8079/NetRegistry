@@ -127,7 +127,7 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
             // Update the registry with price and payment link
             registry.Price = price;
             registry.PaymentLink = paymentLink;
-            registry.Status = RegistryStatus.Rejected;
+            registry.Status = RegistryStatus.AwaitingPayment;
 
             logger.LogInformation(
                 "Registry {RegistryId} has been confirmed with Price {Price} and PaymentLink {PaymentLink}.",

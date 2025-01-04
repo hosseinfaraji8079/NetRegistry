@@ -116,7 +116,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     /// <param name="uniqueId">The unique identifier for the payment to accept.</param>
     /// <returns>An <see cref="ApiResult"/> representing the result of the payment acceptance operation.</returns>
     /// <response code="200">Returns an OK status if the payment is successfully accepted.</response>
-    [HttpPut("uniqueId")]
+    [HttpPut("AcceptPayment/{uniqueId}")]
     [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
     [ProducesDefaultResponseType]
     public async Task<ApiResult> AcceptPayment(string uniqueId)
@@ -131,7 +131,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     /// <param name="uniqueId">The unique identifier for the payment to reject.</param>
     /// <returns>An <see cref="ApiResult"/> representing the result of the payment rejection operation.</returns>
     /// <response code="200">Returns an OK status if the payment is successfully rejected.</response>
-    [HttpPut("uniqueId")]
+    [HttpPut("RejectPayment/{uniqueId}")]
     [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
     [ProducesDefaultResponseType]
     public async Task<ApiResult> RejectPayment(string uniqueId)

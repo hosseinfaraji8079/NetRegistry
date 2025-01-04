@@ -21,7 +21,7 @@ public class RegistryDecisionDto : IValidatableObject
     /// <summary>
     /// Gets or sets the predefined rejection reason ID. Required if Model is not provided.
     /// </summary>
-    public int? PredefinedRejectionReasonId { get; set; }
+    public long? PredefinedRejectionReasonId { get; set; }
 
     /// <summary>
     /// Gets or sets additional explanations provided during rejection.

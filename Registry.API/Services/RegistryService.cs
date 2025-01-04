@@ -73,7 +73,7 @@ public class RegistryService(
                 throw new ApplicationException("Predefined rejection reason ID is required.");
             }
 
-            var rejectionReason = await rejectionRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId.Value);
+            var rejectionReason = await rejectionRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId ?? 0);
             if (rejectionReason == null)
             {
                 logger.LogWarning("Predefined rejection reason with ID {ReasonId} not found.",

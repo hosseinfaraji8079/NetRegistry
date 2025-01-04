@@ -59,4 +59,12 @@ public interface IRegistryService
     /// <param name="unique">The unique identifier associated with the payment.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task RejectPayment(string unique);
+
+    /// <summary>
+    /// Retrieves registry details by the specified unique identifier (ID).
+    /// </summary>
+    /// <param name="id">The unique identifier of the registry to retrieve.</param>
+    /// <param name="userId"></param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation to fetch the registry details.</returns>
+    Task<RegistryDto> GetRegistryById(long id,long? userId);
 }

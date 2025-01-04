@@ -139,4 +139,41 @@ public class RegistryController(IRegistryService service) : DefaultController
         await service.RejectPayment(uniqueId);
         return Ok();
     }
+    
+    /// <summary>
+    /// Retrieves the registry details by the specified unique identifier (ID) for the current user.
+    /// </summary>
+    /// <param name="id">The unique identifier of the registry to retrieve.</param>
+    /// <returns>
+    /// An <see cref="ApiResult{T}"/> containing the registry details as a <see cref="RegistryDto"/> object.
+    /// </returns>
+    /// <response code="200">Returns an OK status with the registry details.</response>
+    /// <response code="500">Returns an Internal Server Error if the operation fails.</response>
+    [HttpGet("GetRegistryById/{id}")]
+    [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.InternalServerError)]
+    public async Task<ApiResult<RegistryDto>> GetRegistryById(long id)
+    {
+        return await service.GetRegistryById(id, User.GetId());
+    }
+
+    /// <summary>
+    /// Retrieves the registry details by the specified unique identifier (ID), regardless of the user.
+    /// </summary>
+    /// <param name="id">The unique identifier of the registry to retrieve.</param>
+    /// <returns>
+    /// An <see cref="ApiResult{T}"/> containing the registry details as a <see cref="RegistryDto"/> object.
+    /// </returns>
+    /// <response code="200">Returns an OK status with the registry details.</response>
+    /// <response code="500">Returns an Internal Server Error if the operation fails.</response>
+    [HttpGet("RegistryById/{id}")]
+    [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ApiResult<RegistryDto>), (int)HttpStatusCode.InternalServerError)]
+    [PermissionChecker("supporter")]
+    [PermissionChecker("xxxx")]
+    public async Task<ApiResult<RegistryDto>> RegistryById(long id)
+    {
+        return await service.GetRegistryById(id, null);
+    }
+
 }

@@ -114,8 +114,11 @@ public class RegistryService(
 
     public async Task AcceptedPayment(string unique)
     {
-        var registry = await repository.GetQueryableAsync().SingleOrDefaultAsync(x => x.UniqueId == unique);
-        if (registry is null) throw new ApplicationException("not exist");
+        var registry = await repository
+            .GetQueryableAsync()
+            .SingleOrDefaultAsync(x => x.UniqueId == unique);
+        
+        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment) throw new ApplicationException("not exist");
 
         registry.UniqueId = Guid.NewGuid().ToString("N");
         registry.Status = RegistryStatus.QueuedForOperation;
@@ -126,11 +129,22 @@ public class RegistryService(
     public async Task RejectPayment(string unique)
     {
         var registry = await repository.GetQueryableAsync().SingleOrDefaultAsync(x => x.UniqueId == unique);
-        if (registry is null) throw new ApplicationException("not exist");
+        
+        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment) throw new ApplicationException("not exist");
 
         registry.UniqueId = Guid.NewGuid().ToString("N");
         registry.Status = RegistryStatus.Rejected;
 
         await repository.UpdateAsync(registry);
+    }
+
+    public async Task<RegistryDto> GetRegistryById(long id,long? userId)
+    {
+        var registry = await repository.GetByIdAsync(id);
+        
+        if (userId is not null & registry.UserId != userId)
+            throw new ApplicationException($"not exists by Id {id}");
+        
+        return mapper.Map<RegistryDto>(registry);
     }
 }

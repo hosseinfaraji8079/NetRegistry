@@ -172,7 +172,7 @@ public class RegistryController(IRegistryService service) : DefaultController
     [PermissionChecker("supporter")]
     public async Task<ApiResult<RegistryDto>> RegistryById(long id)
     {
-        return await service.GetRegistryById(id, null);
+        return Ok(await service.GetRegistryById(id, null));
     }
 
 }

@@ -142,7 +142,7 @@ public class RegistryService(
     {
         var registry = await repository.GetByIdAsync(id);
         
-        if (userId is not null & registry.UserId != userId)
+        if (registry is null || (userId is not null && registry.UserId != userId))
             throw new ApplicationException($"not exists by Id {id}");
         
         return mapper.Map<RegistryDto>(registry);

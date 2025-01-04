@@ -4,10 +4,10 @@
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - /var/registry/NetRegistry/Registry.API/Nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.key:/etc/certificate/dev.samanii.key
-      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.cer:/etc/certificate/dev.samanii.cer
+#    volumes:
+#      - /var/registry/NetRegistry/Registry.API/Nginx/nginx.conf:/etc/nginx/nginx.conf
+#      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.key:/etc/certificate/dev.samanii.key
+#      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.cer:/etc/certificate/dev.samanii.cer
     restart: unless-stopped
     networks:
       - nginx-network

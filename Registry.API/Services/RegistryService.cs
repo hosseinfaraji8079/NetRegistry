@@ -42,6 +42,7 @@ public class RegistryService(
         if (existingEntity is null || existingEntity.UserId != userId) throw new ApplicationException("not found");
         
         mapper.Map(registry, existingEntity);
+        existingEntity.Status = RegistryStatus.PendingReview;
         
         await repository.UpdateAsync(existingEntity);
     }

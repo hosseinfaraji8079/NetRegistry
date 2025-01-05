@@ -15,7 +15,8 @@ public class RegistryService(
     IRegistryRepository repository,
     IMapper mapper,
     ILogger<RegistryService> logger,
-    IAsyncRepository<RejectionReason> rejectionRepository) : IRegistryService
+    IAsyncRepository<RejectionReason> rejectionRepository,
+    IAsyncRepository<PredefinedRejectionReason> predefinedRepository) : IRegistryService
 {
     public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter, long? userId)
     {
@@ -73,7 +74,8 @@ public class RegistryService(
                 throw new ApplicationException("Predefined rejection reason ID is required.");
             }
 
-            var rejectionReason = await rejectionRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId ?? 0);
+            var rejectionReason = await predefinedRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId ?? 0);
+            
             if (rejectionReason == null)
             {
                 logger.LogWarning("Predefined rejection reason with ID {ReasonId} not found.",

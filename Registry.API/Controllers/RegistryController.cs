@@ -175,4 +175,24 @@ public class RegistryController(IRegistryService service) : DefaultController
         return Ok(await service.GetRegistryById(id, null));
     }
 
+    /// <summary>
+    /// Updates the registry with the provided details.
+    /// </summary>
+    /// <param name="registry">The data transfer object containing the updated registry details.</param>
+    /// <returns>An <see cref="ApiResult"/> indicating the outcome of the operation.</returns>
+    /// <response code="200">Indicates that the update operation completed successfully.</response>
+    /// <response code="400">Indicates that the request is invalid, such as when the IMEI numbers already exist.</response>
+    /// <response code="404">Indicates that the registry to update was not found.</response>
+    /// <remarks>
+    /// This endpoint updates an existing registry based on the provided data and the user's ID extracted from the token.
+    /// </remarks>
+
+    [HttpPut]
+    [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ApiResult> Update(UpdateRegistryDto registry)
+    {
+        await service.UpdateAsync(registry, User.GetId());
+        return Ok();
+    }
 }

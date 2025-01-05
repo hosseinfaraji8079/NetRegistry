@@ -24,7 +24,10 @@ public class RegistryService(
 
         if (userId is not null) predicate = x => x.UserId == userId;
 
-        var data = await repository.GetAsync(predicate, true);
+        var data = await repository.GetAsync(
+            predicate: predicate,
+            includeString: "RejectionReasons.PredefinedRejectionReason"
+        );
 
         var mappedData = mapper.Map<IEnumerable<RegistryDto>>(data);
 
@@ -75,7 +78,7 @@ public class RegistryService(
             }
 
             var rejectionReason = await predefinedRepository.GetByIdAsync(decisionDto.PredefinedRejectionReasonId ?? 0);
-            
+
             if (rejectionReason == null)
             {
                 logger.LogWarning("Predefined rejection reason with ID {ReasonId} not found.",
@@ -119,8 +122,9 @@ public class RegistryService(
         var registry = await repository
             .GetQueryableAsync()
             .SingleOrDefaultAsync(x => x.UniqueId == unique);
-        
-        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment) throw new ApplicationException("not exist");
+
+        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment)
+            throw new ApplicationException("not exist");
 
         registry.UniqueId = Guid.NewGuid().ToString("N");
         registry.Status = RegistryStatus.QueuedForOperation;
@@ -131,8 +135,9 @@ public class RegistryService(
     public async Task RejectPayment(string unique)
     {
         var registry = await repository.GetQueryableAsync().SingleOrDefaultAsync(x => x.UniqueId == unique);
-        
-        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment) throw new ApplicationException("not exist");
+
+        if (registry is null || registry.Status != RegistryStatus.AwaitingPayment)
+            throw new ApplicationException("not exist");
 
         registry.UniqueId = Guid.NewGuid().ToString("N");
         registry.Status = RegistryStatus.Rejected;
@@ -140,13 +145,15 @@ public class RegistryService(
         await repository.UpdateAsync(registry);
     }
 
-    public async Task<RegistryDto> GetRegistryById(long id,long? userId)
+    public async Task<RegistryDto> GetRegistryById(long id, long? userId)
     {
-        var registry = await repository.GetByIdAsync(id);
-        
+        var registry = await repository.GetByIdAsync(
+            id: id,
+            includeString: "RejectionReasons.PredefinedRejectionReason");
+
         if (registry is null || (userId is not null && registry.UserId != userId))
             throw new ApplicationException($"not exists by Id {id}");
-        
+
         return mapper.Map<RegistryDto>(registry);
     }
 }

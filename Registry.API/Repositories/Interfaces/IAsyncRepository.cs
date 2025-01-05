@@ -59,6 +59,24 @@ public interface IAsyncRepository<T> where T : EntityBase
     /// <param name="id">Unique identifier of the entity.</param>
     /// <returns>The entity matching the specified id or null if not found.</returns>
     Task<T> GetByIdAsync(long id);
+    
+    /// <summary>
+    /// Retrieves a single entity by its unique identifier with optional includes.
+    /// </summary>
+    /// <param name="id">The unique identifier of the entity.</param>
+    /// <param name="includeString">Navigation properties to include as a comma-separated string.</param>
+    /// <param name="disableTracking">Disable EF Core tracking if true.</param>
+    /// <returns>A task representing the entity matching the specified id or null if not found.</returns>
+    Task<T> GetByIdAsync(long id, string includeString = null, bool disableTracking = true);
+
+    /// <summary>
+    /// Retrieves a single entity by its unique identifier with optional includes using expressions.
+    /// </summary>
+    /// <param name="id">The unique identifier of the entity.</param>
+    /// <param name="includes">Navigation properties to include as expressions.</param>
+    /// <param name="disableTracking">Disable EF Core tracking if true.</param>
+    /// <returns>A task representing the entity matching the specified id or null if not found.</returns>
+    Task<T> GetByIdAsync(long id, IEnumerable<Expression<Func<T, object>>> includes = null, bool disableTracking = true);
 
     /// <summary>
     /// Adds a new entity asynchronously.

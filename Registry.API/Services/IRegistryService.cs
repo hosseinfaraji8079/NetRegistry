@@ -1,4 +1,6 @@
-﻿using Registry.API.Filters;
+﻿using System.ComponentModel.DataAnnotations;
+using Registry.API.Enums;
+using Registry.API.Filters;
 using Registry.API.ViewModel;
 
 namespace Registry.API.Services;
@@ -24,6 +26,21 @@ public interface IRegistryService
     /// <param name="userId">The registry for who</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task AddAsync(AddRegistryDto registry,long userId);
+
+    /// <summary>
+    /// Updates an existing registry with the provided details and associates it with the specified user.
+    /// </summary>
+    /// <param name="registry">The data transfer object containing the updated registry details.</param>
+    /// <param name="userId">The unique identifier of the user performing the update.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    /// <exception cref="ValidationException">
+    /// Thrown when the provided IMEI numbers already exist in the system and the status is not <see cref="RegistryStatus.Rejected"/>.
+    /// </exception>
+    /// <exception>
+    /// Thrown when the registry to update is not found.
+    /// <cref>NotFoundException</cref>
+    /// </exception>
+    Task UpdateAsync(UpdateRegistryDto registry, long userId);
     
     /// <summary>
     /// Processes a registry entry by accepting or rejecting it based on the provided data.

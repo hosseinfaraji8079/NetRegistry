@@ -90,8 +90,8 @@ public class Registry : EntityBase
     /// Gets or sets the user associated with this entity.
     /// </summary>
     public User User { get; set; }
-
-    /// <summary>
+    
+    /// <summary> 
     /// Gets or sets the unique identifier for the user. 
     /// This property serves as a foreign key referencing the <see cref="User"/> entity.
     /// </summary>

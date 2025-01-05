@@ -1,17 +1,4 @@
 ﻿services:
-  nginx:
-    image: nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/registry/NetRegistry/Registry.API/Nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.key:/etc/certificate/dev.samanii.key
-      - /var/registry/NetRegistry/Registry.API/Nginx/dev.samanii.cer:/etc/certificate/dev.samanii.cer
-    restart: unless-stopped
-    networks:
-      - nginx-network
-
   registry.api:
     image: registry.api
     ports:
@@ -22,10 +9,7 @@
       dockerfile: Registry.API/Dockerfile
     depends_on:
       - registryDB
-      - nginx
-    networks:
-      - nginx-network
-  
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -37,7 +21,6 @@
       - "5050:80"
     depends_on:
       - registryDB
-      - nginx
 
   registryDB:
     image: postgres
@@ -51,12 +34,7 @@
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - nginx-network
+
 
 volumes:
   postgres_data:
-    
-networks:
-  nginx-network:
-    driver: bridge

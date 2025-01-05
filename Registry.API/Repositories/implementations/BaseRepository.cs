@@ -88,6 +88,38 @@ public class BaseRepository<T> : IAsyncRepository<T> where T : EntityBase
         return await _dbContext.Set<T>().FindAsync(id);
     }
 
+    public async Task<T> GetByIdAsync(long id, string includeString = null, bool disableTracking = true)
+    {
+        IQueryable<T> query = _dbContext.Set<T>();
+
+        if (disableTracking)
+            query = query.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(includeString))
+            query = query.Include(includeString);
+
+        return await query.FirstOrDefaultAsync(entity => entity.Id == id);
+    }
+
+
+    public async Task<T> GetByIdAsync(long id, IEnumerable<Expression<Func<T, object>>> includes = null, bool disableTracking = true)
+    {
+        IQueryable<T> query = _dbContext.Set<T>();
+
+        if (disableTracking)
+            query = query.AsNoTracking();
+
+        if (includes != null)
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+
+        return await query.FirstOrDefaultAsync(entity => entity.Id == id);
+    }
+
     public async Task<T> AddAsync(T entity)
     {
         entity.CreateDate = DateTime.UtcNow;

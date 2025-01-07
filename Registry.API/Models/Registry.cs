@@ -14,7 +14,7 @@ public class Registry : EntityBase
     /// Generate Unique Id For Accepts Transaction 
     /// </summary>
     public string? UniqueId { get; set; } = new Guid().ToString("N");
-    
+
     /// <summary>
     /// Gets or sets the first IMEI number (International Mobile Equipment Identity).
     /// </summary>
@@ -90,16 +90,48 @@ public class Registry : EntityBase
     /// Gets or sets the user associated with this entity.
     /// </summary>
     public User User { get; set; }
-    
+
     /// <summary> 
     /// Gets or sets the unique identifier for the user. 
     /// This property serves as a foreign key referencing the <see cref="User"/> entity.
     /// </summary>
     [ForeignKey(nameof(User))]
     public long UserId { get; set; }
-    
+
     /// <summary>
     /// Navigation property to the list of rejection reasons associated with this registry.
     /// </summary>
     public List<RejectionReason>? RejectionReasons { get; set; }
+
+    /// <summary>
+    /// National ID of the traveler.
+    /// </summary>
+    [MaxLength(length: 11, ErrorMessage = "this filed max length {0}")]
+    [MinLength(length: 10, ErrorMessage = "this filed min length {0}")]
+    public string? TravelerNationalId { get; set; }
+
+    /// <summary>
+    /// Phone number of the traveler.
+    /// </summary>
+    public string? TravelerPhone { get; set; }
+
+    /// <summary>
+    /// Birthdate of the traveler.
+    /// </summary>
+    public DateTime? TravelerBirthDate { get; set; }
+
+    /// <summary>
+    /// Customs IBAN number.
+    /// </summary>
+    public string? CustomsIBAN { get; set; }
+
+    /// <summary>
+    /// Customs payment identifier.
+    /// </summary>
+    public string? CustomsPaymentId { get; set; }
+
+    /// <summary>
+    /// Customs amount.
+    /// </summary>
+    public long? CustomsAmount { get; set; }
 }

@@ -34,16 +34,16 @@ public class RegistryService(
         await filter.Paging(mappedData);
         return filter;
     }
-    
+
     public async Task UpdateAsync(UpdateRegistryDto registry, long userId)
     {
         var existingEntity = await repository.GetByIdAsync(registry.Id);
 
         if (existingEntity is null || existingEntity.UserId != userId) throw new ApplicationException("not found");
-        
+
         mapper.Map(registry, existingEntity);
         existingEntity.Status = RegistryStatus.PendingReview;
-        
+
         await repository.UpdateAsync(existingEntity);
     }
 
@@ -167,5 +167,16 @@ public class RegistryService(
             throw new ApplicationException($"not exists by Id {id}");
 
         return mapper.Map<RegistryDto>(registry);
+    }
+
+    public async Task UpdateCustomInformation(UpdateRegistryCustomsDto updateRegistry)
+    {
+        var main = await repository.GetByIdAsync(updateRegistry.Id);
+        if (main is null) throw new ApplicationException($"not found by Id {updateRegistry.Id}");
+
+        mapper.Map(updateRegistry,main);
+        main.Status = RegistryStatus.Finished;
+        
+        await repository.UpdateAsync(main);
     }
 }

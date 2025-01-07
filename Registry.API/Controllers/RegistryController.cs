@@ -195,4 +195,46 @@ public class RegistryController(IRegistryService service) : DefaultController
         await service.UpdateAsync(registry, User.GetId());
         return Ok();
     }
+
+    /// <summary>
+    /// Updates the custom information of a registry entry.
+    /// </summary>
+    /// <param name="registry">
+    /// An object of type <see cref="UpdateRegistryCustomsDto"/> containing the details to update the registry.
+    /// </param>
+    /// <returns>
+    /// Returns an <see cref="ApiResult"/> indicating the success or failure of the operation.
+    /// </returns>
+    /// <response code="200">
+    /// Indicates that the registry information was successfully updated.
+    /// </response>
+    /// <response code="400">
+    /// Indicates that the input data is invalid.
+    /// </response>
+    /// <response code="401">
+    /// Indicates that the user is not authorized to perform this action.
+    /// </response>
+    /// <response code="500">
+    /// Indicates an internal server error occurred while processing the request.
+    /// </response>
+    /// <remarks>
+    /// This endpoint is secured and requires the "supporter" permission.
+    /// Use this API to update custom information for a registry entry.
+    /// </remarks>
+    /// <example>
+    /// Example usage:
+    /// <code>
+    /// PUT /api/registry-customs
+    /// </code>
+    /// </example>
+    [HttpPut("registry-customs")]
+    [PermissionChecker("supporter")]
+    [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ApiResult> Update(UpdateRegistryCustomsDto registry)
+    {
+        await service.UpdateCustomInformation(registry);
+        return Ok();
+    }
+
 }

@@ -84,4 +84,31 @@ public interface IRegistryService
     /// <param name="userId"></param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation to fetch the registry details.</returns>
     Task<RegistryDto> GetRegistryById(long id,long? userId);
+
+    /// <summary>
+    /// Updates custom information for a specified updateRegistry entry.
+    /// </summary>
+    /// <param name="updateRegistry">
+    /// An object of type <see cref="UpdateRegistryCustomsDto"/> containing the updated custom information.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous operation.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if the <paramref name="updateRegistry"/> parameter is null.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the updateRegistry entry cannot be found or updated.
+    /// </exception>
+    /// <remarks>
+    /// This method allows updating custom data associated with a updateRegistry entry.
+    /// Ensure the provided <paramref name="updateRegistry"/> contains valid and complete data before calling this method.
+    /// </remarks>
+    /// <example>
+    /// Example usage:
+    /// <code>
+    /// await UpdateCustomInformation(updateDto);
+    /// </code>
+    /// </example>
+    Task UpdateCustomInformation(UpdateRegistryCustomsDto updateRegistry);
 }

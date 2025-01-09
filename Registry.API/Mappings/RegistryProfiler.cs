@@ -14,8 +14,12 @@ public class RegistryProfiler : Profile
 
         CreateMap<RegistryDto, Models.Registry>().ReverseMap();
 
-        CreateMap<Models.Registry, UpdateRegistryDto>().ReverseMap();
-        
+        CreateMap<Models.Registry, UpdateRegistryDto>()
+            .ReverseMap();
+
+        CreateMap<Models.Registry, UpdateRegistryCustomsDto>()
+            .ReverseMap();
+
         CreateMap<Models.Registry, RegistryDto>()
             .ForMember(dest => dest.Reason,
                 opt => opt.MapFrom(src => src.RejectionReasons.LastOrDefault().PredefinedRejectionReason.Reason))
@@ -23,7 +27,8 @@ public class RegistryProfiler : Profile
                 opt => opt.MapFrom(src => src.RejectionReasons.LastOrDefault().AdditionalExplanation));
 
         CreateMap<User, UserDto>().ReverseMap();
-        
-        CreateMap<PredefinedRejectionReason, PredefinedRejectionReasonDto>().ReverseMap();
+
+        CreateMap<PredefinedRejectionReason, PredefinedRejectionReasonDto>()
+            .ReverseMap();
     }
 }

@@ -17,5 +17,5 @@ public class PredefinedRejectionReasonDto
     /// </summary>
     [Required(ErrorMessage = "Reason is required.")]
     [MaxLength(150, ErrorMessage = "Reason cannot exceed 150 characters.")]
-    public string Reason { get; set; }
+    public string? Reason { get; set; }
 }

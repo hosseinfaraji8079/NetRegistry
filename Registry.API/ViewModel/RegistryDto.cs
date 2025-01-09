@@ -83,4 +83,35 @@ public class RegistryDto
     /// Additional explanation or remarks related to the registry entry.
     /// </summary>
     public string? AdditionalExplanation { get; set; }
+    
+    
+    /// <summary>
+    /// National ID of the traveler.
+    /// </summary>
+    public string? TravelerNationalId { get; set; }
+
+    /// <summary>
+    /// Phone number of the traveler.
+    /// </summary>
+    public string? TravelerPhone { get; set; }
+
+    /// <summary>
+    /// Birthdate of the traveler.
+    /// </summary>
+    public DateTime? TravelerBirthDate { get; set; }
+
+    /// <summary>
+    /// Customs IBAN number.
+    /// </summary>
+    public string? CustomsIBAN { get; set; }
+
+    /// <summary>
+    /// Customs payment identifier.
+    /// </summary>
+    public string? CustomsPaymentId { get; set; }
+
+    /// <summary>
+    /// Customs amount.
+    /// </summary>
+    public long? CustomsAmount { get; set; }
 }

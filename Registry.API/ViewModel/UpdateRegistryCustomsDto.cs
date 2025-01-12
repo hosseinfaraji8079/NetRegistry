@@ -21,7 +21,7 @@ public class UpdateRegistryCustomsDto
     /// <summary>
     /// Birthdate of the traveler.
     /// </summary>
-    public DateTime? TravelerBirthDate { get; set; }
+    public string? TravelerBirthDate { get; set; }
 
     /// <summary>
     /// Customs IBAN number.

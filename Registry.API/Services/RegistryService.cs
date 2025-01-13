@@ -20,9 +20,10 @@ public class RegistryService(
 {
     public async Task<FilterRegistryDto> FilterAsync(FilterRegistryDto filter, long? userId)
     {
-        Expression<Func<Models.Registry, bool>> predicate = x => true;
-
-        if (userId is not null) predicate = x => x.UserId == userId;
+        Expression<Func<Models.Registry, bool>> predicate = x =>
+            (userId == null || x.UserId == userId) &&
+            (filter.Status == null || x.Status == filter.Status) &&
+            (string.IsNullOrEmpty(filter.Imei) || EF.Functions.Like(x.ImeI_1, $"%{filter.Imei}%"));
 
         var data = await repository.GetAsync(
             predicate: predicate,
@@ -174,9 +175,9 @@ public class RegistryService(
         var main = await repository.GetByIdAsync(updateRegistry.Id);
         if (main is null) throw new ApplicationException($"not found by Id {updateRegistry.Id}");
 
-        mapper.Map(updateRegistry,main);
+        mapper.Map(updateRegistry, main);
         main.Status = RegistryStatus.Finished;
-        
+
         await repository.UpdateAsync(main);
     }
 }

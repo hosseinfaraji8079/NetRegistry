@@ -5,6 +5,8 @@ namespace Registry.API.ViewModel;
 
 public class UserDto
 {
+    public long? Balance { get; set; }
+    
     /// <summary>
     /// Gets or sets the unique chat ID associated with the user.
     /// </summary>

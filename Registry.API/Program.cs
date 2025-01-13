@@ -18,7 +18,6 @@ using Registry.API.Seeds;
 using Registry.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers();

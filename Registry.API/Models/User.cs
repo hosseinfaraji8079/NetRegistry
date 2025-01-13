@@ -45,6 +45,11 @@ public class User : EntityBase
     public string? Password { get; set; }
 
     /// <summary>
+    /// This filed user balance
+    /// </summary>
+    public long Balance { get; set; } = 0;
+    
+    /// <summary>
     /// Gets or sets the roles associated with the user.
     /// </summary>
     public ICollection<UserRole>? UserRoles { get; set; }

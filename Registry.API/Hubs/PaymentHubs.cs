@@ -117,10 +117,11 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
     /// This method should be invoked by the support team.
     /// </summary>
     /// <param name="registryId">The unique identifier of the registry to confirm.</param>
+    /// <param name="profit">the profit agent</param>
     /// <param name="price">The confirmed price for the registry.</param>
     /// <param name="paymentLink">The payment link associated with the registry.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task ConfirmPayment(long registryId, long price, string paymentLink)
+    public async Task ConfirmPayment(long registryId,long profit,  long price, string paymentLink)
     {
         if (_pendingRegistries.TryGetValue(registryId, out var registry))
         {
@@ -128,7 +129,8 @@ public class PaymentHubs(ILogger<PaymentHubs> logger) : Hub
             registry.Price = price;
             registry.PaymentLink = paymentLink;
             registry.Status = RegistryStatus.AwaitingPayment;
-
+            registry.Profit = profit;
+            
             logger.LogInformation(
                 "Registry {RegistryId} has been confirmed with Price {Price} and PaymentLink {PaymentLink}.",
                 registryId, price, paymentLink);

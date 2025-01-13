@@ -66,7 +66,12 @@ public class Registry : EntityBase
     /// This is an optional field.
     /// </summary>
     public long? Price { get; set; }
-
+    
+    /// <summary>
+    /// Gets User Profit
+    /// </summary>
+    public long? Profit { get; set; }
+    
     /// <summary>
     /// payment link
     /// </summary>
@@ -89,7 +94,7 @@ public class Registry : EntityBase
     /// <summary>
     /// Gets or sets the user associated with this entity.
     /// </summary>
-    public User User { get; set; }
+    public User? User { get; set; }
 
     /// <summary> 
     /// Gets or sets the unique identifier for the user. 

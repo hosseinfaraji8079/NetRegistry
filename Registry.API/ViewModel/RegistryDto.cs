@@ -114,4 +114,9 @@ public class RegistryDto
     /// Customs amount.
     /// </summary>
     public long? CustomsAmount { get; set; }
+
+    /// <summary>
+    /// Profit Order
+    /// </summary>
+    public long Profit { get; set; }
 }

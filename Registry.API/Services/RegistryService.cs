@@ -13,6 +13,7 @@ namespace Registry.API.Services;
 
 public class RegistryService(
     IRegistryRepository repository,
+    IUserService userService,
     IMapper mapper,
     ILogger<RegistryService> logger,
     IAsyncRepository<RejectionReason> rejectionRepository,
@@ -135,14 +136,16 @@ public class RegistryService(
         var registry = await repository
             .GetQueryableAsync()
             .SingleOrDefaultAsync(x => x.UniqueId == unique);
-
+        
         if (registry is null || registry.Status != RegistryStatus.AwaitingPayment)
             throw new ApplicationException("not exist");
-
+            
         registry.UniqueId = Guid.NewGuid().ToString("N");
         registry.Status = RegistryStatus.QueuedForOperation;
-
+        
         await repository.UpdateAsync(registry);
+        var user = await userService.GetUserParentAsync(registry.UserId);
+        // todo : increase user balance 
     }
 
     public async Task RejectPayment(string unique)

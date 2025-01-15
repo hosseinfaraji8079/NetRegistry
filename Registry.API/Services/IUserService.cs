@@ -20,4 +20,11 @@ public interface IUserService
     /// <param name="userId">The unique identifier of the user.</param>
     /// <returns>A task representing the asynchronous operation. The task result contains the user's details as a <see cref="UserDto"/>.</returns>
     Task<UserDto> GetUserByIdAsync(long userId);
+
+    /// <summary>
+    /// get user parent async
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    Task<UserDto?> GetUserParentAsync(long userId);
 }

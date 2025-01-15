@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Registry.API.Common;
 
 namespace Registry.API.Models;
@@ -8,6 +9,19 @@ namespace Registry.API.Models;
 /// </summary>
 public class User : EntityBase
 {
+
+    /// <summary>
+    /// Foreign key referencing the parent user.
+    /// This property allows hierarchical user relationships.
+    /// </summary>
+    [ForeignKey(nameof(Parent))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// The parent user in a hierarchical relationship.
+    /// </summary>
+    public User? Parent { get; set; }
+    
     /// <summary>
     /// Gets or sets the unique chat ID associated with the user.
     /// </summary>
@@ -47,7 +61,7 @@ public class User : EntityBase
     /// <summary>
     /// This filed user balance
     /// </summary>
-    public long Balance { get; set; } = 0;
+    public int Balance { get; set; } = 0;
     
     /// <summary>
     /// Gets or sets the roles associated with the user.

@@ -10,7 +10,11 @@ public class RegistryProfiler : Profile
     {
         CreateMap<AddRegistryDto, Models.Registry>();
 
-        CreateMap<User, AddUserDto>().ReverseMap();
+        CreateMap<User, AddUserDto>()
+            .ForMember(dest => dest.Parent, opt => opt.Ignore())
+            .ReverseMap();
+
+        CreateMap<User, AddPrentDto>().ReverseMap();
 
         CreateMap<RegistryDto, Models.Registry>().ReverseMap();
 

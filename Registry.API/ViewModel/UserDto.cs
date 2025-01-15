@@ -5,7 +5,10 @@ namespace Registry.API.ViewModel;
 
 public class UserDto
 {
-    public long? Balance { get; set; }
+    /// <summary>
+    /// user balance
+    /// </summary>
+    public int Balance { get; set; }
     
     /// <summary>
     /// Gets or sets the unique chat ID associated with the user.
@@ -33,7 +36,7 @@ public class UserDto
     [Display(Name = "Username")]
     [MaxLength(50, ErrorMessage = "{0} cannot exceed {1} characters.")]
     public string? UserName { get; set; }
-
+    
     /// <summary>
     /// id for user
     /// </summary>

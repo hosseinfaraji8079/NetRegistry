@@ -10,23 +10,31 @@ using IAuthorizationService = Registry.API.Services.IAuthorizationService;
 
 namespace Registry.API.Controllers;
 
-public class UserController(IUserService userService,IAuthorizationService authorizationService) : DefaultController 
+public class UserController(IUserService userService, IAuthorizationService authorizationService) : DefaultController
 {
     [HttpGet]
-    [ProducesResponseType(typeof(ApiResult<List<long>>),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ApiResult<List<long>>), (int)HttpStatusCode.OK)]
     public async Task<ApiResult<List<long>>> Get()
     {
         var s = HttpContext.User;
-       var d = User;
-       var dd = await authorizationService.HasUserPermission(1, "supporter");
+        var d = User;
+        var dd = await authorizationService.HasUserPermission(1, "supporter");
         return Ok(1);
     }
 
     [HttpPost]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(ApiResult<string>),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ApiResult<string>), (int)HttpStatusCode.OK)]
     public async Task<ApiResult<string>> Post([FromBody] AddUserDto user)
     {
         return Ok(await userService.GetTokenUserAsync(user));
+    }
+
+    [HttpGet("parent")]
+    [ProducesResponseType(typeof(UserDto),(int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Nullable),(int)HttpStatusCode.OK)]
+    public async Task<ApiResult<UserDto>> GetParent()
+    {
+        return Ok(await userService.GetUserParentAsync(User.GetId()));
     }
 }
